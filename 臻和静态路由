@@ -1,0 +1,24 @@
+
+臻和要求 存储所在的10.3.0.0 网段 和 “GPU服务器、华大测序仪”的 192.168.126.0 网段通
+
+在万兆交换机起了一个新vlan 10
+vlan 10 网关： 192.168.126.206
+本身vlan 1 设置一个 互通网关： 10.3.1.253/16   #此ip可以用于ssh
+
+此时在臻和存储需要指定到 192.168.126.0的静态路由
+ip route add 192.168.126.0/24 via 10.3.1.253 dev extbond
+
+shell 脚本
+for i in{1..10};do echo node$i; ssh node$i "ip route add 192.168.126.0/24 via 10.3.1.253 dev extbond && ip r |grep 192.168.126.0 ";done
+
+写入静态路由表
+ vi /etc/sysconfig/network-scripts/route-extbond  #“extbond”是指的网卡名称
+192.168.126.0/24 via 10.3.1.253 dev extbond
+
+
+
+
+需要配置华大测序仪那边的静态路由
+10.3.0.0 走下一跳 192.168.126.206
+
+

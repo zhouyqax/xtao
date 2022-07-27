@@ -1,0 +1,50 @@
+int Eth-Trunk 1
+portswitch
+mode lacp-dynamic
+trunkport 100GE 1/0/1:1
+quit
+comm
+int Eth-Trunk 2
+portswitch
+mode lacp-dynamic
+trunkport 100GE 1/0/1:2
+quit
+comm
+int Eth-Trunk 3
+portswitch
+mode lacp-dynamic
+trunkport 100GE 1/0/1:3
+quit
+comm
+int Eth-Trunk 4
+portswitch
+mode lacp-dynamic
+trunkport 100GE 1/0/1:4
+quit
+comm
+-------------------------
+int Eth-Trunk 5
+portswitch
+mode lacp-dynamic
+trunkport 100GE 1/0/3:1
+quit
+comm
+int Eth-Trunk 6
+portswitch
+mode lacp-dynamic
+trunkport 100GE 1/0/3:2
+comm
+int Eth-Trunk 7
+portswitch
+mode lacp-dynamic
+trunkport 100GE 1/0/3:3
+quit
+comm
+int Eth-Trunk 8
+portswitch
+mode lacp-dynamic
+trunkport 100GE 1/0/3:4
+quit
+comm
+
+----------------

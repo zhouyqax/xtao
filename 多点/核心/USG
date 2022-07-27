@@ -1,0 +1,71 @@
+设备型号：USG6585E-AC
+设备版本：V600R007 C20SPC500
+产品指导书：https://support.huawei.com/hedex/hdx.do?docid=EDOC1100149311&lang=zh&idPath=24030814%7C9856724%7C21430823%7C253423179%7C22914752
+
+补丁包
+https://support.huawei.com/enterprise/zh/software/253594565-ESW2000504555   
+
+网段规划：
+172.16.22.1/30  对端核心 172.16.22.2/30
+172.16.23.1/24 对端 eSight 172.16.23.10/24
+ 互联网地址：
+
+
+
+路由：
+0.0.0.0 0.0.0.0 互联网接口
+172.16.24.1/24 172.16.22.2
+172.16.25.1/24 172.16.22.2
+172.16.30.1/24 172.16.22.2
+172.16.31.1/24 172.16.22.2
+172.16.32.1/24 172.16.22.2
+
+NAT出口正常上网
+
+=================================
+
+system-view
+sysname FW_A
+q
+clock datetime 18:10:45 2022-07-25
+clock timezone BJ add 08:00:00
+system-view
+int G 0/0/0
+sys DMZ-eSight
+ip addr 172.16.23.1 24
+q
+int G 0/0/1
+sys untrust-Internet
+ip addr 10.10.10.10 24
+q
+
+int XG 0/0/0
+sys to-hexin
+ip addr 172.16.22.1 24
+q
+
+firewall zone trust
+add interface XGigabitEthernet 0/0/0
+q
+firewall zone DMZ
+add interface GigabitEthernet 0/0/0
+q
+firewall zone untrust
+add interface GigabitEthernet 0/0/1
+q
+
+ip route-static 0.0.0.0 0.0.0.0 10.10.10.254
+security-policy
+default action permit
+q
+#回头添加允许SW-AC-AP访问eSight
+nat-policy
+rule name policy_nat_1
+source-address 172.16.31.0 mask 255.255.255.0
+source-zone trust
+egress-interface GigabitEthernet 0/0/2
+action source-nat easy-ip
+quit
+quit
+#回头添加NAT可用地址段
+#下面配置ssh
